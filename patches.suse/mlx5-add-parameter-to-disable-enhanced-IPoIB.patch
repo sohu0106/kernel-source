@@ -14,14 +14,12 @@ all mlx5 HCA and allow users to pick datagram/connected the usual way.
 
 Signed-off-by: Nicolas Morey-Chaisemartin <nmoreychaisemartin@suse.com>
 ---
- drivers/infiniband/hw/mlx5/main.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/infiniband/hw/mlx5/main.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/infiniband/hw/mlx5/main.c b/drivers/infiniband/hw/mlx5/main.c
-index ef8d51ec8a40..4997de10e614 100644
 --- a/drivers/infiniband/hw/mlx5/main.c
 +++ b/drivers/infiniband/hw/mlx5/main.c
-@@ -68,6 +68,10 @@ MODULE_AUTHOR("Eli Cohen <eli@mellanox.com>");
+@@ -68,6 +68,10 @@ MODULE_AUTHOR("Eli Cohen <eli@mellanox.c
  MODULE_DESCRIPTION("Mellanox Connect-IB HCA IB driver");
  MODULE_LICENSE("Dual BSD/GPL");
  
@@ -32,16 +30,11 @@ index ef8d51ec8a40..4997de10e614 100644
  static char mlx5_version[] =
  	DRIVER_NAME ": Mellanox Connect-IB Infiniband driver v"
  	DRIVER_VERSION "\n";
-@@ -4026,7 +4030,8 @@ static void *mlx5_ib_add(struct mlx5_core_dev *mdev)
- 	dev->ib_dev.get_port_immutable  = mlx5_port_immutable;
+@@ -4009,6 +4013,7 @@ static void *mlx5_ib_add(struct mlx5_cor
  	dev->ib_dev.get_dev_fw_str      = get_dev_fw_str;
  	dev->ib_dev.get_vector_affinity	= mlx5_ib_get_vector_affinity;
--	if (MLX5_CAP_GEN(mdev, ipoib_enhanced_offloads))
-+	if (MLX5_CAP_GEN(mdev, ipoib_enhanced_offloads) &&
-+		ipoib_enhanced)
- 		dev->ib_dev.alloc_rdma_netdev	= mlx5_ib_alloc_rdma_netdev;
+ 	if (MLX5_CAP_GEN(mdev, ipoib_enhanced_offloads) &&
++	    ipoib_enhanced &&
+ 	    IS_ENABLED(CONFIG_MLX5_CORE_IPOIB))
+ 		dev->ib_dev.rdma_netdev_get_params = mlx5_ib_rn_get_params;
  
- 	if (mlx5_core_is_pf(mdev)) {
--- 
-2.24.0
-
