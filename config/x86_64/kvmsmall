@@ -135,6 +135,7 @@ CONFIG_DW_DMAC_CORE=m
 # CONFIG_GFS2_FS is not set
 # CONFIG_GPIOLIB is not set
 # CONFIG_GTP is not set
+# CONFIG_HAMRADIO is not set
 # CONFIG_HFSPLUS_FS is not set
 # CONFIG_HID_A4TECH is not set
 # CONFIG_HID_ACCUTOUCH is not set
