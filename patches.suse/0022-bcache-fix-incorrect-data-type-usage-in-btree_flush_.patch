@@ -4,12 +4,13 @@ Date: Sat, 1 Feb 2020 22:42:34 +0800
 Subject: [PATCH] bcache: fix incorrect data type usage in btree_flush_write()
 Git-commit: d1c3cc34f5a78b38d2b809b289d912c3560545df
 Patch-mainline: v5.6-rc1
-References: bsc#1163762
+References: bsc#1163762, git fixes (block drivers)
 
 Dan Carpenter points out that from commit 2aa8c529387c ("bcache: avoid
 unnecessary btree nodes flushing in btree_flush_write()"), there is a
 incorrect data type usage which leads to the following static checker
-Warning: drivers/md/bcache/journal.c:444 btree_flush_write()
+warning:
+	drivers/md/bcache/journal.c:444 btree_flush_write()
 	warn: 'ref_nr' unsigned <= 0
 
 drivers/md/bcache/journal.c
@@ -61,7 +62,6 @@ Fixes: 2aa8c529387c ("bcache: avoid unnecessary btree nodes flushing in btree_fl
 Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 Signed-off-by: Coly Li <colyli@suse.de>
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
-
 ---
  drivers/md/bcache/journal.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
@@ -81,5 +81,5 @@ index 33ddc5269e8d..6730820780b0 100644
  	size_t mask;
  
 -- 
-2.16.4
+2.25.0
 
