@@ -24,6 +24,7 @@ Acked-by: Evgeniy Polyakov <zbr@ioremap.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Acked-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
 ---
+ Documentation/DocBook/w1.tmpl         |    4 
  MAINTAINERS                           |    1 
  drivers/power/supply/ds2760_battery.c |    2 
  drivers/power/supply/ds2780_battery.c |    2 
@@ -61,8 +62,22 @@ Acked-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
  drivers/w1/w1_netlink.c               |    2 
  drivers/w1/w1_netlink.h               |    2 
  include/linux/w1.h                    |  320 ++++++++++++++++++++++++++++++++
- 37 files changed, 479 insertions(+), 531 deletions(-)
+ 38 files changed, 481 insertions(+), 533 deletions(-)
 
+--- a/Documentation/DocBook/w1.tmpl
++++ b/Documentation/DocBook/w1.tmpl
+@@ -51,9 +51,9 @@
+     <sect1 id="w1_internal_api">
+       <title>W1 API internal to the kernel</title>
+       <sect2 id="w1.h">
+-        <title>drivers/w1/w1.h</title>
++        <title>include/linux/w1.h</title>
+         <para>W1 core functions.</para>
+-!Idrivers/w1/w1.h
++!Iinclude/linux/w1.h
+       </sect2>
+ 
+       <sect2 id="w1.c">
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
 @@ -13779,6 +13779,7 @@ M:	Evgeniy Polyakov <zbr@ioremap.net>
