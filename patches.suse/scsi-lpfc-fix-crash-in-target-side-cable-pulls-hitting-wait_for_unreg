@@ -2,9 +2,9 @@ From: James Smart <jsmart2021@gmail.com>
 Date: Sun, 22 Mar 2020 11:12:59 -0700
 Subject: scsi: lpfc: Fix crash in target side cable pulls hitting
  WAIT_FOR_UNREG
-Patch-mainline: v5.7-rc1
 Git-commit: 807e7353d8a7105ce884d22b0dbc034993c6679c
-References: bsc#1164777 bsc#1164780 bsc#1165211
+Patch-mainline: v5.7-rc1
+References: bsc#1164777 bsc#1164780 bsc#1165211 bsc#1171615
 
 Kernel is crashing with the following stacktrace:
 
@@ -38,14 +38,16 @@ Fixes: b15bd3e6212e ("scsi: lpfc: Fix nvme remoteport registration race conditio
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Acked-by: Daniel Wagner <dwagner@suse.de>
+Acked-by: Lee Duncan <lduncan@suse.com>
 ---
- drivers/scsi/lpfc/lpfc_nvme.c |   14 ++++++++------
+ drivers/scsi/lpfc/lpfc_nvme.c | 14 ++++++++------
  1 file changed, 8 insertions(+), 6 deletions(-)
 
+diff --git a/drivers/scsi/lpfc/lpfc_nvme.c b/drivers/scsi/lpfc/lpfc_nvme.c
+index f6c8963c915d..32b28651039e 100644
 --- a/drivers/scsi/lpfc/lpfc_nvme.c
 +++ b/drivers/scsi/lpfc/lpfc_nvme.c
-@@ -382,13 +382,15 @@ lpfc_nvme_remoteport_delete(struct nvme_
+@@ -382,13 +382,15 @@ lpfc_nvme_remoteport_delete(struct nvme_fc_remote_port *remoteport)
  	if (ndlp->upcall_flags & NLP_WAIT_FOR_UNREG) {
  		ndlp->nrport = NULL;
  		ndlp->upcall_flags &= ~NLP_WAIT_FOR_UNREG;
@@ -67,3 +69,4 @@ Acked-by: Daniel Wagner <dwagner@suse.de>
  
   rport_err:
  	return;
+
