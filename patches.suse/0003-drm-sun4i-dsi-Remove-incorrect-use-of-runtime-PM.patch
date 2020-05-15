@@ -96,9 +96,12 @@ Signed-off-by: Samuel Holland <samuel@sholland.org>
 Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 Link: https://patchwork.freedesktop.org/patch/msgid/20200211072858.30784-4-samuel@sholland.org
 Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+[ ptesarik: Remove enable/disable regulator, because SLE15-SP1 does not
+  contain upstream commit 1c056ad87117c47a02b73df63555788b751968c4. ]
+Signed-off-by: Petr Tesarik <ptesarik@suse.com>
 ---
- drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c |   78 ++++++++++-----------------------
- 1 file changed, 25 insertions(+), 53 deletions(-)
+ drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c |   72 ++++++++-------------------------
+ 1 file changed, 19 insertions(+), 53 deletions(-)
 
 --- a/drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c
 +++ b/drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c
@@ -110,19 +113,11 @@ Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
  #include <linux/regmap.h>
  #include <linux/reset.h>
  #include <linux/slab.h>
-@@ -623,10 +622,31 @@ static void sun6i_dsi_encoder_enable(str
- 	struct sun6i_dsi *dsi = encoder_to_sun6i_dsi(encoder);
- 	struct mipi_dsi_device *device = dsi->device;
- 	u16 delay;
-+	int err;
+@@ -623,7 +622,23 @@ static void sun6i_dsi_encoder_enable(str
  
  	DRM_DEBUG_DRIVER("Enabling DSI output\n");
  
 -	pm_runtime_get_sync(dsi->dev);
-+	err = regulator_enable(dsi->regulator);
-+	if (err)
-+		dev_warn(dsi->dev, "failed to enable VCC-DSI supply: %d\n", err);
-+
 +	reset_control_deassert(dsi->reset);
 +	clk_prepare_enable(dsi->mod_clk);
 +
@@ -143,14 +138,13 @@ Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
  
  	delay = sun6i_dsi_get_video_start_delay(dsi, mode);
  	regmap_write(dsi->regs, SUN6I_DSI_BASIC_CTL1_REG,
-@@ -682,7 +702,9 @@ static void sun6i_dsi_encoder_disable(st
+@@ -682,7 +702,8 @@ static void sun6i_dsi_encoder_disable(st
  	sun6i_dphy_power_off(dsi->dphy);
  	sun6i_dphy_exit(dsi->dphy);
  
 -	pm_runtime_put(dsi->dev);
 +	clk_disable_unprepare(dsi->mod_clk);
 +	reset_control_assert(dsi->reset);
-+	regulator_disable(dsi->regulator);
  }
  
  static int sun6i_dsi_get_modes(struct drm_connector *connector)
