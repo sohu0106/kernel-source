@@ -14,26 +14,26 @@ Link: https://lore.kernel.org/r/20200219073951.16151-2-jslaby@suse.cz
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Oliver Neukum <oneukum@suse.com>
 ---
- drivers/tty/vt/vt_ioctl.c |   29 ++++++++++++++++++++++-------
- 1 file changed, 22 insertions(+), 7 deletions(-)
+ drivers/tty/vt/vt_ioctl.c |   28 +++++++++++++++++++++-------
+ 1 file changed, 21 insertions(+), 7 deletions(-)
 
 --- a/drivers/tty/vt/vt_ioctl.c
 +++ b/drivers/tty/vt/vt_ioctl.c
-@@ -39,10 +39,25 @@
+@@ -39,11 +39,25 @@
  #include <linux/selection.h>
  
  char vt_dont_switch;
 -extern struct tty_driver *console_driver;
  
 -#define VT_IS_IN_USE(i)	(console_driver->ttys[i] && console_driver->ttys[i]->count)
--#define VT_BUSY(i)	(VT_IS_IN_USE(i) || i == fg_console || vc_cons[i].d == sel_cons)
+-#define VT_BUSY(i)	(VT_IS_IN_USE(i) || i == fg_console || vc_is_sel(vc_cons[i].d))
 +static inline bool vt_in_use(unsigned int i)
 +{
 +	extern struct tty_driver *console_driver;
 +
 +	return console_driver->ttys[i] && console_driver->ttys[i]->count;
 +}
-+
+ 
 +static inline bool vt_busy(int i)
 +{
 +	if (vt_in_use(i))
@@ -45,10 +45,10 @@ Signed-off-by: Oliver Neukum <oneukum@suse.com>
 +
 +	return false;
 +}
- 
  /*
   * Console (vt and kd) routines, as defined by USL SVR4 manual, and by
-@@ -292,7 +307,7 @@ static int vt_disallocate(unsigned int v
+  * experimentation and study of X386 SYSV handling.
+@@ -292,7 +306,7 @@ static int vt_disallocate(unsigned int v
  	int ret = 0;
  
  	console_lock();
@@ -57,7 +57,7 @@ Signed-off-by: Oliver Neukum <oneukum@suse.com>
  		ret = -EBUSY;
  	else if (vc_num)
  		vc = vc_deallocate(vc_num);
-@@ -314,7 +329,7 @@ static void vt_disallocate_all(void)
+@@ -314,7 +328,7 @@ static void vt_disallocate_all(void)
  
  	console_lock();
  	for (i = 1; i < MAX_NR_CONSOLES; i++)
@@ -66,7 +66,7 @@ Signed-off-by: Oliver Neukum <oneukum@suse.com>
  			vc[i] = vc_deallocate(i);
  		else
  			vc[i] = NULL;
-@@ -651,7 +666,7 @@ int vt_ioctl(struct tty_struct *tty,
+@@ -651,7 +665,7 @@ int vt_ioctl(struct tty_struct *tty,
  			state = 1;	/* /dev/tty0 is always open */
  			for (i = 0, mask = 2; i < MAX_NR_CONSOLES && mask;
  							++i, mask <<= 1)
@@ -75,7 +75,7 @@ Signed-off-by: Oliver Neukum <oneukum@suse.com>
  					state |= mask;
  			ret = put_user(state, &vtstat->v_state);
  		}
-@@ -664,7 +679,7 @@ int vt_ioctl(struct tty_struct *tty,
+@@ -664,7 +678,7 @@ int vt_ioctl(struct tty_struct *tty,
  	case VT_OPENQRY:
  		/* FIXME: locking ? - but then this is a stupid API */
  		for (i = 0; i < MAX_NR_CONSOLES; ++i)
