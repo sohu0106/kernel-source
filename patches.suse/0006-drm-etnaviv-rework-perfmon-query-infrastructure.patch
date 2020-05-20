@@ -15,14 +15,26 @@ Cc: stable@vger.kernel.org
 Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
 Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
 Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+[ ptesarik: Since SLE15-SP1 does not contain upstream commit
+  15ff4a7b584163b12b118a2c381529f05ff3a94d, it's necessary to add
+  the missing #include to get chipFeatures_* macro definitions. ]
+Signed-off-by: Petr Tesarik <ptesarik@suse.com>
 ---
- drivers/gpu/drm/etnaviv/etnaviv_perfmon.c | 59 ++++++++++++++++++++---
- 1 file changed, 52 insertions(+), 7 deletions(-)
+ drivers/gpu/drm/etnaviv/etnaviv_perfmon.c | 60 ++++++++++++++++++++++++++----
+ 1 file changed, 53 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/gpu/drm/etnaviv/etnaviv_perfmon.c b/drivers/gpu/drm/etnaviv/etnaviv_perfmon.c
 index 8adbf2861bff4f..e6795bafcbb976 100644
 --- a/drivers/gpu/drm/etnaviv/etnaviv_perfmon.c
 +++ b/drivers/gpu/drm/etnaviv/etnaviv_perfmon.c
+@@ -4,6 +4,7 @@
+  * Copyright (C) 2017 Zodiac Inflight Innovations
+  */
+ 
++#include "common.xml.h"
+ #include "etnaviv_gpu.h"
+ #include "etnaviv_perfmon.h"
+ #include "state_hi.xml.h"
 @@ -32,6 +32,7 @@ struct etnaviv_pm_domain {
  };
  
