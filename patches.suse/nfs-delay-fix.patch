@@ -31,7 +31,7 @@ Signed-off-by: NeilBrown <neilb@suse.com>
 @@ -1534,6 +1532,8 @@ static void nfs_set_open_stateid_locked(
  			break;
  
- 		prepare_to_wait(wq_head, &wbq_entry.wq_entry, TASK_KILLABLE);
+ 		prepare_to_wait(&state->waitq, &wait, TASK_KILLABLE);
 +		if (!test_bit(NFS_STATE_CHANGE_WAIT, &state->flags))
 +			break;
  		/*

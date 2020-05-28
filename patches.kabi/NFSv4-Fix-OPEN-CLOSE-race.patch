@@ -53,9 +53,9 @@ Signed-off-by: NeilBrown <neilb@suse.de>
  
 -		prepare_to_wait(&state->waitq, &wait, TASK_KILLABLE);
 +		prepare_to_wait(wq_head, &wbq_entry.wq_entry, TASK_KILLABLE);
+ 		if (!test_bit(NFS_STATE_CHANGE_WAIT, &state->flags))
+ 			break;
  		/*
- 		 * Ensure we process the state changes in the same order
- 		 * in which the server processed them by delaying the
 @@ -1549,7 +1551,7 @@ static void nfs_set_open_stateid_locked(
  				status = 0;
  		} else
