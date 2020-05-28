@@ -3,7 +3,7 @@ Date: Thu, 16 Apr 2020 13:44:30 +0200
 Subject: s390/pci: do not set affinity for floating irqs
 Git-commit: 86dbf32da150339ca81509fa2eb84c814b55258b
 Patch-mainline: v5.7-rc3
-References: git-fixes
+References: bsc#1171817 LTC#185819 git-fixes
 
 with the introduction of CPU directed interrupts the kernel
 parameter pci=force_floating was introduced to fall back
