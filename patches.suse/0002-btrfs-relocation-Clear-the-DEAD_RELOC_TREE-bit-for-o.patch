@@ -1,10 +1,12 @@
 From 9973801ac79f1c8aaf80e00b4e3f357aebebc1a3 Mon Sep 17 00:00:00 2001
 From: Qu Wenruo <wqu@suse.com>
 Date: Wed, 20 May 2020 14:00:57 +0800
-Patch-mainline: Submitted, Wed, 20 May 2020 14:58:50 +0800
 References: bsc#1171417
 Subject: [PATCH 2/2] btrfs: relocation: Clear the DEAD_RELOC_TREE bit for
  orphan roots to prevent runaway balance
+Git-repo: https://github.com/kdave/btrfs-devel.git
+Git-commit: 1dae7e0e58b484eaa43d530f211098fdeeb0f404
+Patch-mainline: Queued
 
 [BUG]
 There are several reported runaway balance, that balance is flooding the
