@@ -34,7 +34,7 @@ Acked-by: Takashi Iwai <tiwai@suse.de>
 
 --- a/drivers/iio/adc/stm32-adc.c
 +++ b/drivers/iio/adc/stm32-adc.c
-@@ -970,18 +970,18 @@ static int stm32_adc_chan_of_init(struct
+@@ -992,18 +992,18 @@ static int stm32_adc_chan_of_init(struct
  	return 0;
  }
  
@@ -56,15 +56,15 @@ Acked-by: Takashi Iwai <tiwai@suse.de>
  					"DMA channel request failed with %d\n",
  					ret);
  			return ret;
-@@ -1024,6 +1024,7 @@ err_release:
+@@ -1046,6 +1046,7 @@ err_release:
  static int stm32_adc_probe(struct platform_device *pdev)
  {
  	struct iio_dev *indio_dev;
 +	struct device *dev = &pdev->dev;
+ 	irqreturn_t (*handler)(int irq, void *p) = NULL;
  	struct stm32_adc *adc;
  	int ret;
- 
-@@ -1087,7 +1088,7 @@ static int stm32_adc_probe(struct platfo
+@@ -1110,7 +1111,7 @@ static int stm32_adc_probe(struct platfo
  	if (ret < 0)
  		goto err_clk_disable;
  
